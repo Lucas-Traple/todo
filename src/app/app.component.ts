@@ -11,6 +11,8 @@ import { Todo } from 'src/models/todo.model';
 export class AppComponent {
   public title: string = 'Minhas tarefas';
 
+  public mode = 'list';
+
   public todos: Todo[] = [];
   public form!: FormGroup;
 
@@ -36,7 +38,7 @@ export class AppComponent {
   alterText(){
       if (this.title === 'Minhas tarefas') {
         this.title = 'Text';
-      } else {
+      } else{
         this.title = 'Minhas tarefas';
       }
   }
@@ -72,6 +74,9 @@ export class AppComponent {
     this.todos = JSON.parse(localStorage?.getItem('todos')!);
   }
 
+  changeMode(mode: string){
+      this.mode = mode;
+  }
 }
 
 //    Binding
