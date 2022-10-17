@@ -3,7 +3,7 @@ export class Todo{
         public id: Number,
         public title: String,
         public done: Boolean,
+        public comment: string = ""
     ) {}
 
-    public comment: string = "";
 }   

@@ -21,6 +21,7 @@ export class AppComponent {
   
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
+      id: [''],
       title: ['', Validators.compose([
         Validators.minLength(3),
         Validators.maxLength(30),
@@ -30,9 +31,6 @@ export class AppComponent {
     })
 
     this.load();
-    // this.todos.push(new Todo(1, 'First Shore', true));
-    // this.todos.push(new Todo(2, 'Second Shore', false));
-    // this.todos.push(new Todo(3, 'Third Shore', false));
   }
 
   alterText(){
@@ -53,21 +51,43 @@ export class AppComponent {
       this.localstorageSave();
   }
   
-  add(){
-    this.todos.push(new Todo(
-      this.todos?.length === 0 ? 1 : (+this.todos[this.todos?.length - 1]?.id + 1), 
-      this.form.controls['title'].value,      
-      false));
+  update(){
+      console.log('Id: ' + this.form.controls['id'].value + 'tipo ' + typeof(this.form.controls['id'].value))
+      let todoList: Todo[] = JSON.parse(localStorage?.getItem('todos')!);
+      this.todos.splice(this.todos.indexOf(todoList.filter(todo => todo.id == this.form.controls['id'].value)[0]), 1);
+      
+      this.todos.push(new Todo(
+        this.form.controls['id'].value, 
+        this.form.controls['title'].value,      
+        false,
+        this.form.controls['comment'].value));   
+      
+      this.localstorageSave();
+      this.form.reset();
+  }
+
+  add(){      
+      this.todos.push(new Todo(
+        this.todos?.length === 0 ? 1 : (+this.todos[this.todos?.length - 1]?.id + 1), 
+        this.form.controls['title'].value,      
+        false,
+        this.form.controls['comment'].value));   
+      
       this.localstorageSave();
       this.form.reset();
   }
 
   showItemDetails(todo: Todo) {
-    
+      this.form.patchValue({
+        id: todo.id,
+        title: todo.title,
+        comment: todo.comment
+      });
   }
 
   localstorageSave(){
     localStorage.setItem('todos', JSON.stringify(this.todos));
+    this.mode = 'list';
   }
 
   load(){
@@ -75,6 +95,7 @@ export class AppComponent {
   }
 
   changeMode(mode: string){
+    console.log('Id: ' + '"' + this.form.controls['id'].value + '"' + ' - ' + 'tipo ' + typeof(this.form.controls['id'].value))
       this.mode = mode;
   }
 }

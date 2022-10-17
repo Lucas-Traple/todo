@@ -87,10 +87,6 @@ li>button:hover {
   box-shadow: 3px 4px 14px 0px rgba(0, 0, 0, 0.39);
 }
 
-#modal>h1 {
-  font-weight: 300;
-}
-
 input {
   width: 100%;
   line-height: 50px;

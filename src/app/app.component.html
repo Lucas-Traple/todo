@@ -2,26 +2,36 @@
 <button (click)="alterText()">alter</button>
 <ul class="animated flipInX" *ngIf="mode == 'list'">
   <p><small>{{ date }}</small></p>
-  <p *ngIf="todos.length == 0"><small>Você não tem nenhuma tarefa hoje!</small></p>
-  <li *ngFor="let todo of todos">
-    {{ todo.title }} - {{ todo.done }}
-    <button (click)="removeItem(todo)">Remover</button>
-    <button *ngIf="!todo.done" (click)="alterStatusItem(todo)">Concluir</button>
-    <button *ngIf="todo.done" (click)="alterStatusItem(todo)">Refazer</button>
-    <button (click)="showItemDetails(todo)">Detalhes</button>
+  <p class="text-center" *ngIf="todos?.length == 0"><small>Você não tem nenhuma tarefa hoje!</small></p>
+  <li *ngFor="let todo of todos" >
+    {{ todo.title }}
+    <button (click)="removeItem(todo)"><i class="far fa-trash-alt"></i></button>
+    <button *ngIf="!todo.done" (click)="alterStatusItem(todo)"><i class="far fa-check-circle"></i></button>
+    <button *ngIf="todo.done" (click)="alterStatusItem(todo)"><i class="fas fa-check-circle"></i></button>
+    <button (click)="showItemDetails(todo)" (click)="changeMode('add')">Detalhes</button>
   </li>
 </ul> 
 <div id="modal" *ngIf="mode == 'add'" class="animated flipInX">
   <form [formGroup]="form">
-    <fieldset>
-      <label>Título </label>
+      <input hidden type="number" formControlName="id">
+      <label>Título:</label>
       <input type="text" placeholder="Insira um título" maxlength="30" formControlName="title">
-      <small *ngIf="['form.controls.title.invalid'] && !form.controls['title'].pristine">Este campo deve conter entre 3 e 30 caracteres</small>
-      <label>Comentário </label>
+      <small class="danger" *ngIf="['form.controls.title.invalid'] && !form.controls['title'].pristine">
+        Este campo deve conter entre 3 e 30 caracteres<br>
+      </small>
+      <label>Comentário:</label>
       <input type="text" placeholder="Insira um comentário" maxlength="300" formControlName="comment">
-      <small *ngIf="['form.controls.comment.invalid'] && !form.controls['comment'].pristine">Este campo deve conter até 300 caracteres</small>
-      <button class="button" (click)="add()" [disabled]="form.invalid">Salvar</button>
-    </fieldset>
+      <small class="danger" *ngIf="['form.controls.comment.invalid'] && !form.controls['comment'].pristine">
+        Este campo deve conter até 300 caracteres<br>
+      </small>
+      <p class="text-center">
+        <button class="button" (click)="add()" [disabled]="form.invalid" *ngIf="['form.controls.id.value']">
+          <i class="far fa-save"></i> Salvar
+        </button>
+        <button class="button" (click)="update()" [disabled]="form.invalid" *ngIf="!['form.controls.id.value']">
+          Alterar
+        </button>
+      </p>  
   </form>
 </div>
 
