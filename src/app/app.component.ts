@@ -21,7 +21,7 @@ export class AppComponent {
   
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
-      id: [''],
+      id: [null],
       title: ['', Validators.compose([
         Validators.minLength(3),
         Validators.maxLength(30),
@@ -52,12 +52,11 @@ export class AppComponent {
   }
   
   update(){
-      console.log('Id: ' + this.form.controls['id'].value + 'tipo ' + typeof(this.form.controls['id'].value))
-      let todoList: Todo[] = JSON.parse(localStorage?.getItem('todos')!);
-      this.todos.splice(this.todos.indexOf(todoList.filter(todo => todo.id == this.form.controls['id'].value)[0]), 1);
-      
+    const id: number = this.form.controls['id'].value;
+    this.removeItem(this.todos.filter(todo => todo.id == id)[0]);  
+
       this.todos.push(new Todo(
-        this.form.controls['id'].value, 
+        id, 
         this.form.controls['title'].value,      
         false,
         this.form.controls['comment'].value));   
@@ -67,8 +66,8 @@ export class AppComponent {
   }
 
   add(){      
-      this.todos.push(new Todo(
-        this.todos?.length === 0 ? 1 : (+this.todos[this.todos?.length - 1]?.id + 1), 
+    this.todos.push(new Todo(
+        this.getId(), 
         this.form.controls['title'].value,      
         false,
         this.form.controls['comment'].value));   
@@ -77,9 +76,14 @@ export class AppComponent {
       this.form.reset();
   }
 
+  private getId(){
+    return this.todos?.length === 0 ? 0 
+      : (+this.todos[this.todos?.length - 1]?.id + 1)
+  }
+
   showItemDetails(todo: Todo) {
       this.form.patchValue({
-        id: todo.id,
+        id: +todo.id,
         title: todo.title,
         comment: todo.comment
       });
@@ -95,7 +99,7 @@ export class AppComponent {
   }
 
   changeMode(mode: string){
-    console.log('Id: ' + '"' + this.form.controls['id'].value + '"' + ' - ' + 'tipo ' + typeof(this.form.controls['id'].value))
+    console.log('Id: ' + this.form.controls['id'].value + ' tipo ' + typeof(this.form.controls['id'].value))
       this.mode = mode;
   }
 }
