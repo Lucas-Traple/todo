@@ -25,10 +25,10 @@
         Este campo deve conter até 300 caracteres<br>
       </small>
       <p class="text-center">
-        <button class="button" (click)="add()" [disabled]="form.invalid" *ngIf="['form.controls.id.value']">
+        <button class="button" (click)="add()" [disabled]="form.invalid" *ngIf="['form.controls.id.value'] == null">
           <i class="far fa-save"></i> Salvar
         </button>
-        <button class="button" (click)="update()" [disabled]="form.invalid" *ngIf="!['form.controls.id.value']">
+        <button class="button" (click)="update()" [disabled]="form.invalid" *ngIf="['form.controls.id.value'] != null">
           Alterar
         </button>
       </p>  
